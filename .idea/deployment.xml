@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="Amazon" showDifferentInSync="false">
+    <serverData>
+      <paths name="Amazon">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/" local="$PROJECT_DIR$/java main site" web="/" />
+            <mapping deploy="/scopic" local="$PROJECT_DIR$/newscopic" web="/scopic" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>

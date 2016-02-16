@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/untitled/untitled.iml" filepath="$PROJECT_DIR$/untitled/untitled.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java main site/java main site.iml" filepath="$PROJECT_DIR$/java main site/java main site.iml" />
+      <module fileurl="file://$PROJECT_DIR$/newscopic/newscopic.iml" filepath="$PROJECT_DIR$/newscopic/newscopic.iml" />
     </modules>
   </component>
 </project>
