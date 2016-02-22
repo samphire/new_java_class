@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/newscopic/home.php" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/newscopic/index.php" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/newscopic/sessionheader.inc" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/newscopic/test.php" charset="UTF-8" />
   </component>
 </project>

@@ -5,214 +5,285 @@
  * Date: 2/16/2016
  * Time: 3:21 PM
  */
-
 include("sessionheader.inc");
-
 $sql = "SELECT * FROM tbl_courses";
 $query = mysqli_query($conn, $sql);
-
 ?>
 
-
 <style type="text/css">
-
-    #content {
-        width: 96%;
-        margin: 0 auto;
-        background-color: aliceblue;
+    body {
+        background-color: white;
+        font-size: x-large;
+        font-family: 'ubunturegular', Arial, sans-serif;
     }
 
-    #setup {
-        display: none;
-    }
-
-    .slider {
-        position: fixed;
-        width: 100%;
-        left: 100%;
-
-        -webkit-transition-duration: 0.5s;
-        -moz-transition-duration: 0.5s;
-        transition-duration: 0.5s;
-    }
-
-    .slider.off {
-        left: 100%;
-    }
-
-    .slider.on {
-        left: 0%;
-    }
-
-    .slider.done {
-        left: -100%;
-    }
-
-    #setPass, #enterPass{
+    #setCourse, #setPass, #enterPass, #setStudent {
+        top: 40%;
+        left: 50%;
+        position: absolute;
+        width: 90%;
+        left: 0px;
         text-align: center;
+        padding: 30px;
+    }
+    #setCourse{
+        top: 30%;
     }
 
-    input{
+    #setStudent{
+        /*line-height: 500px;*/
+    }
+
+    .inner {
+        width: 70%;
+        margin: 0 auto;
+    }
+
+    input {
         padding: 5px;
         margin: 10px;
     }
 
+    .on {
+        display: block;
+    }
+
+    .off {
+        display: none;
+    }
+
+    option, select {
+        font-size: x-large;
+        margin-top: 1em;
+        color: greenyellow;
+        background-color: #333333;
+    }
+
     .selectCourse {
         border-radius: 5px;
-        background-color: wheat;
-        width: 88%;
-        padding: 1%;
-        margin-top: 5px;
+        background-color: #333333;
+        padding: 2%;
+        width: 96%;
+        margin: 0 auto;
+        margin-top: 30px;
+        color: greenyellow;
+        cursor: pointer;
     }
+
+
 </style>
+<script language="JavaScript">
+    var courseid, coursedesc, studentid, password;
+    var ajax;
+    if (typeof Storage !== "undefined") {
+        localStorage.removeItem("user");
+        if (localStorage.getItem("user")) {
+            courseid = localStorage.getItem("course");
+            coursedesc = localStorage.getItem("coursedesc");
+            studentid = localStorage.getItem("user");
+            password = localStorage.getItem("password");
+            headForHome();
+        }
+    }
+
+    function ajaxCall(method, url, sync) {
+        var bob = null;
+        ajax = new XMLHttpRequest();
+        ajax.open(method, url, sync);
+        ajax.onreadystatechange = function () {
+            if (ajax.readyState == 4) {
+                bob = ajax.responseText;
+            }
+        };
+        ajax.send();
+        return bob;
+    }
+
+    function headForHome() {
+        //set session variables in ajax
+        var resp = ajaxCall("GET", "login.php?courseid=" + courseid + "&coursedesc=" + coursedesc + "&studentid=" + studentid, false);
+//        alert(resp);
+        window.location = "home.php";
+    }
+</script>
 </head>
 <body>
+<div id="setCourse" class="on">
+    <div class="inner">
+        <h2>Set Your Details Here</h2>
 
-
-<div id="content">
-    <div id="setup">
-        <div class="slider on" id="getCourse">
-
-            <h1>Set Your Details Here</h1>
-
-            <h3>You won't have to set them again</h3>
-
-            <?php
-            $lists = array();
-            while (list($courseid, $coursedesc) = mysqli_fetch_row($query)) {
-                print"<div class=\"selectCourse\" onclick=\"setCourse($courseid, this)\">
-                $coursedesc
-                </div>
-                ";
-                $sql = "SELECT * FROM tbl_students JOIN tbl_stud_course
+        <h3>You won't have to set them again</h3>
+        <?php
+        $lists = array();
+        while (list($courseid, $coursedesc) = mysqli_fetch_row($query)) {
+            print"\n<div class=\"selectCourse\" onclick=\"setCourse($courseid, '$coursedesc', this)\">
+                \n$coursedesc
+                \n</div><!--end selectCourse-->";
+            $sql = "SELECT * FROM tbl_students JOIN tbl_stud_course
                 ON tbl_students.fld_student_id = tbl_stud_course.fld_student_id
                 WHERE tbl_stud_course.fld_course_id = " . $courseid;
-                $bob = array();
-                array_push($bob, $sql);
-                array_push($bob, $courseid);
-                array_push($lists, $bob);
-            }
-            print "</div><div class=\"slider off\" id=\"setStudent\">";
+            $bob = array();
+            array_push($bob, $sql);
+            array_push($bob, $courseid);
+            array_push($lists, $bob);
+        }
+        print "\n</div><!--end inner-->\n</div><!--end setCourse-->\n<div id=\"setStudent\" class=\"off\">\n<div class=\"inner\">";
 
-            for ($i = 0; $i < count($lists); $i++) {
-                $sql = $lists[$i][0];
-                $query2 = mysqli_query($conn, $sql);
-                print "<div id=\"course" . $lists[$i][1] . "\"> Select User <select name=\"studid\" onchange=\"setStudent(this);\">";
-                while (list($id, $name, $pass) = mysqli_fetch_row($query2)) {
-                    if(empty($pass)){
-                        print "<option class=\"noPass\" value=\"$id\">$id, $name</option>";
-                    } else{
-                        print "<option value=\"$id\">$id, $name</option>";
-                    }
+        for ($i = 0; $i < count($lists); $i++) {
+            $sql = $lists[$i][0];
+            $query2 = mysqli_query($conn, $sql);
+            print "\n<div id=\"course" . $lists[$i][1] . "\"> \nSelect User<br> \n<select onchange=\"setStudent(this);\">";
+            print "\n<option value=\"\" disabled selected>select student</option>";
+            while (list($id, $name, $pass) = mysqli_fetch_row($query2)) {
+                if (empty($pass)) {
+                    print "\n<option class=\"noPass\" value=\"$id\">$id, $name</option>";
+                } else {
+                    print "\n<option value=\"$id\">$id, $name</option>";
                 }
-                print "</select></div>";
             }
-            print "</div>";
-            ?>
+            print "\n</select>\n</div><!--end course" . $lists[$i][1] . "-->";
+        }
+        print "\n</div><!--end inner-->";
+        print "\n</div><!--end setStudent-->";
+        ?>
 
-
-            <div class="slider off" id="setPass">
+        <div id="setPass" class="off">
+            <div class="inner">
                 Create a Password:<br>
                 <input type="text" id="pass1" autofocus><br>
                 <input type="text" id="pass2" onchange="go(this)">
             </div>
-            <div class="slider off" id="enterPass">
+            <!--end inner-->
+        </div>
+        <!--end setPass-->
+        <div id="enterPass" class="off">
+            <div class="inner">
                 Enter Password:<br>
                 <input type="password" id="realPass">
             </div>
+            <!--end inner-->
         </div>
-    </div>
+        <!--end enterPass-->
 
 
-    <script language="JavaScript">
-        var courseid, studentid, password;
+        <script language="JavaScript">
 
-        if (typeof Storage !== "undefined") {
-            //Remove next line in production version!
-            localStorage.removeItem("user");
-            if (!localStorage.getItem("user")) {
-                document.getElementById("setup").style.display = "block";
-            }
-        }
+            function setCourse(id, desc, myEl) {
+                courseid = id;
+                coursedesc = desc;
+                myEl.parentNode.parentNode.classList.remove("on");
+                myEl.parentNode.parentNode.classList.add("off");
+                myEl.parentNode.parentNode.nextElementSibling.classList.remove("off");
+                myEl.parentNode.parentNode.nextElementSibling.classList.add("on");
 
-        function setCourse(id, myEl) {
-            courseid = id;
-            myEl.parentNode.classList.remove("on");
-            myEl.parentNode.classList.add("done");
-            myEl.parentNode.nextElementSibling.classList.remove("off");
-            myEl.parentNode.nextElementSibling.classList.add("on");
+                var startEl = myEl.parentNode.parentNode.nextElementSibling.firstElementChild;
+//                alert("startEl is " + startEl.tagName + ", " + startEl.classList + ", " + startEl.id);
+                var nodeArr = startEl.childNodes;
+//                alert("there are " + nodeArr.length + " child nodes\nNow will recurse the children");
+//                recurseDomChildren(startEl, true);
 
-            var nodeArr = myEl.parentNode.nextSibling.childNodes;
-            for (var i = 0; i < nodeArr.length; i++) {
-                if (nodeArr[i].id != "course" + id) {
-                    nodeArr[i].remove();
-                }
-            }
-        }
-
-        function setStudent(mySelect) {
-
-            studentid = mySelect.value;
-            var selected = mySelect.options[mySelect.selectedIndex];
-            mySelect.parentNode.parentNode.classList.remove("on");
-            mySelect.parentNode.parentNode.classList.add("done");
-
-            alert("selected" + selected.classList);
-
-            if(selected.classList == "noPass"){
-                mySelect.parentNode.parentNode.nextElementSibling.classList.remove("off");
-                mySelect.parentNode.parentNode.nextElementSibling.classList.add("on");
-            } else{
-                mySelect.parentNode.parentNode.nextElementSibling.nextElementSibling.classList.remove("off");
-                mySelect.parentNode.parentNode.nextElementSibling.nextElementSibling.classList.add("on");
-                document.getElementById("realPass").setAttribute("onchange", "sendPass(this)");
-            }
-        }
-
-        function go(myPass) {
-            alert('go');
-            if (myPass.value === myPass.previousElementSibling.previousElementSibling.value) {
-                password = myPass.value;
-                alert("data: " + courseid + ", " + studentid + ", " + password);
-                putPasswordToDb();
-            }
-        }
-
-        function putPasswordToDb() {
-            var ajax = new XMLHttpRequest();
-            ajax.onreadystatechange = function () {
-                if (ajax.readyState == 4) {
-                    setLocalStorage();
-                }
-            };
-            ajax.open("GET", "putPass.php?user=" + studentid + "&course=" + courseid + "&password=" + password, true);
-            ajax.send();
-        }
-
-        function setLocalStorage() {
-            localStorage.setItem("user", studentid);
-            localStorage.setItem("course", courseid);
-            localStorage.setItem("password", password);
-        }
-
-        function sendPass(myInput){
-            alert("pass is: " + myInput.value);
-            var ajax = new XMLHttpRequest();
-            ajax.onreadystatechange = function () {
-                if (ajax.readyState == 4) {
-                    alert(ajax.responseText);
-                    if(ajax.responseText == 'success'){
-                        password = myInput.value;
-                        setLocalStorage();
-                    } else{
-                        alert('wrong password!');
+                for (var i = 0; i < nodeArr.length; i++) {
+                    var el = nodeArr[i];
+//                    alert(i+1 + "of " + nodeArr.length + ". " + el.nodeName + ", " + el.nodeType + ", " + el.nodeValue + ", " + el.id);
+                    if (nodeArr[i].tagName == "DIV" && nodeArr[i].id != "course" + id) {
+//                        alert("removing " + nodeArr[i].id);
+                        nodeArr[i].remove();
                     }
                 }
-            };
-            ajax.open("GET", "verify.php?user=" + studentid + "&password=" + myInput.value, true);
-            ajax.send();
-        }
+            }
+            function setStudent(mySelect) {
+                studentid = mySelect.value;
+                var selected = mySelect.options[mySelect.selectedIndex];
+                var setStudentNode = mySelect.parentNode.parentNode.parentNode;
+                setStudentNode.classList.remove("on");
+                setStudentNode.classList.add("off");
+                var setPassNode;
+                if (selected.classList == "noPass") {
+                    setPassNode = setStudentNode.nextElementSibling;
+                    setPassNode.classList.remove("off");
+                    setPassNode.classList.add("on");
+                } else {
+                    setPassNode = setStudentNode.nextElementSibling.nextElementSibling;
+                    setPassNode.classList.remove("off");
+                    setPassNode.classList.add("on");
+                    document.getElementById("realPass").setAttribute("onchange", "sendPass(this)");
+                }
+            }
+            function go(myPass) {
+                if (myPass.value === myPass.previousElementSibling.previousElementSibling.value) {
+                    password = myPass.value;
+                    putPasswordToDb();
+                } else {
+                    alert("Passwords do not match. Try again!");
+                }
+            }
+            function putPasswordToDb() {
+                var url = "putPass.php?user=" + studentid + "&course=" + courseid + "&password=" + password;
+                var responseText = ajaxCall("GET", url, false);
+                if (responseText == 'success') {
+                    setLocalStorage();
+                    headForHome();
+                } else {
+                    alert('something wrong! Contact 010 4357 2757');
+                }
 
-    </script>
+
+            }
+            function setLocalStorage() {
+                localStorage.setItem("user", studentid);
+                localStorage.setItem("course", courseid);
+                localStorage.setItem("coursedesc", coursedesc);
+                localStorage.setItem("password", password);
+            }
+            function sendPass(myInput) {
+                var url = "verify.php?user=" + studentid + "&password=" + myInput.value;
+                var responseText = ajaxCall("GET", url, false);
+                if (responseText == 'success') {
+                    password = myInput.value;
+                    setLocalStorage();
+                    headForHome();
+                } else {
+                    alert('wrong password');
+                }
+            }
+
+
+            function recurseDomChildren(start, output) {
+                var nodes;
+                console.log("START IS: " + start.tagName + ", " + start.id);
+                if (start.childNodes) {
+                    nodes = start.childNodes;
+                    loopNodeChildren(nodes, output);
+                }
+            }
+
+            function loopNodeChildren(nodes, output) {
+                var node;
+                for (var i = 0; i < nodes.length; i++) {
+                    node = nodes[i];
+                    if (output) {
+                        outputNode(node);
+                    }
+                    if (node.childNodes) {
+                        recurseDomChildren(node, output);
+                    }
+                }
+            }
+
+            function outputNode(node) {
+                var whitespace = /^\s+$/g;
+                if (node.nodeType === 1) {
+                    console.log("element: " + node.tagName + ", " + node.id + ", " + node.classList);
+                } else if (node.nodeType === 3) {
+                    //clear whitespace text nodes
+                    node.data = node.data.replace(whitespace, "");
+                    if (node.data) {
+                        console.log("text: " + node.data);
+                    }
+                }
+            }
+
+
+        </script>
 </body>
 </html>
