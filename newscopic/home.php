@@ -58,8 +58,6 @@ function convert_datetime($str)
 
         .perc {
             float: right;
-            border-radius: 20px;
-            background-color: aqua;
             padding: 5px;
         }
     </style>
@@ -67,24 +65,26 @@ function convert_datetime($str)
 
 <?php
 print   "\n</head>\n<body>";
+
 print "\n<div class='header'><h2>" . $_SESSION['coursedesc'] . "</h2></div>";
 
 //Get List of Classes the student belongs to
 $sql = "SELECT * FROM tbl_stud_class JOIN tbl_classes
 ON tbl_stud_class.fld_class_id=tbl_classes.fld_class_id
-WHERE tbl_stud_class.fld_student_id=" . $_SESSION['studid'];
+WHERE tbl_stud_class.fld_student_id='" . $_SESSION['studid']."'";
+
 $query = mysqli_query($conn, $sql);
 
 
 while (list($stud, $class) = mysqli_fetch_row($query)) {
 //Get actual scores for this student
-    $sql = "SELECT bob.fld_test_id, bob.fld_desc, bob.fld_startdate, bob.fld_enddate, tbl_stud_testscore.fld_score
+    $sql = "SELECT bob.fld_test_id, bob.fld_desc, bob.fld_startdate, bob.fld_enddate, susan.fld_score
 FROM (SELECT tbl_tests.fld_test_id, tbl_tests.fld_desc, tbl_class_tests.fld_startdate, tbl_class_tests.fld_enddate
 FROM (tbl_classes INNER JOIN tbl_class_tests ON tbl_classes.fld_class_id = tbl_class_tests.fld_classid)
 INNER JOIN tbl_tests ON tbl_class_tests.fld_test_id = tbl_tests.fld_test_id
 WHERE tbl_class_tests.fld_classid=" . $class . ") AS bob
-LEFT JOIN tbl_stud_testscore ON bob.fld_test_id = tbl_stud_testscore.fld_test_id
-WHERE tbl_stud_testscore.fld_student_id = '" . $_SESSION['studid'] . "' OR tbl_stud_testscore.fld_student_id is null
+LEFT JOIN (SELECT fld_test_id, fld_score FROM tbl_stud_testscore WHERE fld_student_id='" . $_SESSION['studid'] . "') AS susan
+ON bob.fld_test_id = susan.fld_test_id
 ORDER BY bob.fld_test_id";
 
     $query2 = mysqli_query($conn, $sql) or die('something wrong');
@@ -124,7 +124,7 @@ ORDER BY bob.fld_test_id";
             if ($val[2] > 0) {
                 echo "<div class='testChoice' onclick='doTest($val[0]);'> $val[1] <div class='perc'>$val[2]%</div></div>";
             } else {
-                echo "<div class='testChoice' onclick='doTest($val[0]);'> $val[1] <div class='perc'>ㅠㅠ</div></div>";
+                echo "<div class='testChoice' onclick='doTest($val[0]);'> $val[1] <div class='perc'></div></div>";
             }
         }
     }

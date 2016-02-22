@@ -18,16 +18,15 @@ $query = mysqli_query($conn, $sql);
     }
 
     #setCourse, #setPass, #enterPass, #setStudent {
-        top: 40%;
-        left: 50%;
+        top: 30%;
+        left: 0%;
         position: absolute;
         width: 90%;
-        left: 0px;
         text-align: center;
-        padding: 30px;
+        padding: 5%;
     }
     #setCourse{
-        top: 30%;
+        top: 10%;
     }
 
     #setStudent{
@@ -57,6 +56,7 @@ $query = mysqli_query($conn, $sql);
         margin-top: 1em;
         color: greenyellow;
         background-color: #333333;
+        padding: 0.2em;
     }
 
     .selectCourse {

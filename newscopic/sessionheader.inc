@@ -10,8 +10,8 @@ $conn = mysqli_connect("localhost", "root", "canal", "panscopic") or die('Error 
 mysqli_query($conn, "SET NAMES utf8");
 mysqli_query($conn, "SET CHARACTER SET utf8");
 session_cache_limiter('private_no_expire, must-revalidate');
-//$_SESSION['global_url'] = "http://52.192.60.185/scopic";
-$_SESSION['global_url'] = "http://localhost/newscopic";
+$_SESSION['global_url'] = "http://52.192.60.185/scopic";
+//$_SESSION['global_url'] = "http://localhost:63342";
 
 print "<!DOCTYPE html>";
 print "\n<head>
