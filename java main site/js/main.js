@@ -13,6 +13,7 @@ function getData(classtoGet) {
 }
 function bob() {
     if (ajax.readyState === 4) {
+        //alert(ajax.responseText);
         myArr = JSON.parse(ajax.responseText);
         if(!gaugesMade){
             makeGauges(myArr);
