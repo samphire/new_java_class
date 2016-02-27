@@ -11,21 +11,54 @@
     <script src="js/vendor/d3.min.js" language="JavaScript"></script>
     <script src="js/liquidFillGauge.js" language="JavaScript"></script>
     <script src="js/main.js" language="javascript"></script>
-<style type="text/css">
-    .callout{
-        border-radius: 3px;
-    }
-</style>
+    <style type="text/css">
+        .callout {
+            border-radius: 3px;
+        }
+
+        .testsimg {
+            position: absolute;
+            left: 0;
+        }
+
+        .testimg {
+            cursor: pointer;
+            z-index: 999;
+
+        }
+
+        .im {
+            position: absolute;
+            top: 5%;
+            right:10px;"
+        }
+
+        @media only screen and (max-width: 768px) {
+            .testimg {
+                width: 65%;
+                float: right;
+            }
+
+            .im {
+                position: absolute;
+                top: 10px;
+                right:6px;"
+            }
+        }
+    </style>
 
 </head>
 <body>
 
 <img src="img/banner.jpg">
-<div style="position: absolute;top: 40px;right:10px;"><img src="img/test.png" style="cursor: pointer" onclick="window.location.href='scopic/index.php';"></div>
+
+<div class="im"><img src="img/test.png" class="testimg"
+                                                                      onclick="window.location.href='scopic/index.php';">
+</div>
 
 <div class="row">
     <div class="large-12 columns">
-        <img src="img/tests.png" style="position: absolute;left: 0px;"
+        <img src="img/tests.png" class='testsimg'
              onmouseover="this.style.opacity='0.4';" onmouseout="this.style.opacity='1';"
              onmousedown="this.style.transform='scale(0.9, 0.9)'" onmouseup="this.style.transform='scale(1,1)'"
              onclick="hideDiv(document.getElementById('testResults'));">
@@ -70,24 +103,30 @@
             <div class="large-4 medium-4 columns">
                 <div class="callout panel" style="overflow-y: hidden;">
                     <img src="img\logo.jpg" style="width: 50%; float: left;">
+
                     <p>Java belongs to Oracle. You can learn to code Java and be a coding genius!</p>
-                    <h4 style="text-align: center;"><a href="http://changki.net/APIs/J2SE_1.8_API_Korean">자바 API</a></h4>
+                    <h4 style="text-align: center;"><a href="http://changki.net/APIs/J2SE_1.8_API_Korean">자바 API</a>
+                    </h4>
                 </div>
             </div>
             <div class="large-4 medium-4 columns">
                 <div class="callout panel" style="text-align: center;">
                     <img src="img/ocjp.png">
+
                     <p>Of course, you can also get5 the certification</p>
+
                     <p>Details can be found <a href="http://www.bbc.com">here</a></p>
                 </div>
             </div>
             <div class="large-4 medium-4 columns">
                 <div class="callout panel">
-                    <p><a href="http://terms.naver.com/entry.nhn?docId=826825&cid=42344&categoryId=42344">Java 이란?</a></p>
+                    <p><a href="http://terms.naver.com/entry.nhn?docId=826825&cid=42344&categoryId=42344">Java 이란?</a>
+                    </p>
+
                     <p><a href="http://cafe.naver.com/javachobostudy">남궁성의 코드초보스터디</a></p>
+                </div>
             </div>
-        </div>
-        <div class="row" style="clear: both;">
+            <div class="row" style="clear: both;"></div>
             <div class="large-6 medium-6 columns">
                 <div class="callout panel">
                 </div>
@@ -109,5 +148,7 @@
 <script>
     $(document).foundation();
 </script>
+
+
 </body>
 </html>
