@@ -50,6 +50,9 @@ function callWrong($con)
         AND tbl_response" . $_SESSION['qnstable'] . ".fld_student_id='" . $_SESSION['studid'] . "'
         ORDER BY tbl_qns" . $_SESSION['qnstable'] . ".fld_qnum";
 
+//    echo "<br>$sql<br>";
+
+
     $query = mysqli_query($con, $sql);
 
     if (!$query) {

@@ -60,19 +60,22 @@ function convert_datetime($str)
             float: right;
             padding: 5px;
         }
+        #reset{
+            position: absolute;
+        }
     </style>
 
 
 <?php
 print   "\n</head>\n<body>";
-
+//print "<img id=\"reset\" src=\"../img/reset.png\" onclick='reset();'>";
 print "\n<div class='header'><h2>" . $_SESSION['coursedesc'] . "</h2></div>";
 
 //Get List of Classes the student belongs to
 $sql = "SELECT * FROM tbl_stud_class JOIN tbl_classes
 ON tbl_stud_class.fld_class_id=tbl_classes.fld_class_id
 WHERE tbl_stud_class.fld_student_id='" . $_SESSION['studid']."'";
-
+//echo "<br>$sql<br>";
 $query = mysqli_query($conn, $sql);
 
 
@@ -86,12 +89,12 @@ WHERE tbl_class_tests.fld_classid=" . $class . ") AS bob
 LEFT JOIN (SELECT fld_test_id, fld_score FROM tbl_stud_testscore WHERE fld_student_id='" . $_SESSION['studid'] . "') AS susan
 ON bob.fld_test_id = susan.fld_test_id
 ORDER BY bob.fld_test_id";
-
+//    echo "<br>$sql<br>";
     $query2 = mysqli_query($conn, $sql) or die('something wrong');
     $numStars = mysqli_num_rows($query2);
     $width = floor(100 / $numStars);
-    $starSize = round(20 / $numStars, 1);
-    if ($starSize > 6) $starSize = 6;
+    $starSize = round(14 / $numStars, 1);
+    if ($starSize > 4) $starSize = 4;
     print "\n<div id=\"stars\">";
 
     $tests = array();

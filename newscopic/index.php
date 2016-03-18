@@ -25,12 +25,11 @@ $query = mysqli_query($conn, $sql);
         text-align: center;
         padding: 5%;
     }
-    #setCourse{
+    #setStudent{
         top: 10%;
     }
-
-    #setStudent{
-        /*line-height: 500px;*/
+    #setCourse{
+        top: 10%;
     }
 
     .inner {
@@ -76,6 +75,7 @@ $query = mysqli_query($conn, $sql);
     var courseid, coursedesc, studentid, password;
     var ajax;
     if (typeof Storage !== "undefined") {
+        //Below line has to be set when testing and so on...
         localStorage.removeItem("user");
         if (localStorage.getItem("user")) {
             courseid = localStorage.getItem("course");
@@ -159,7 +159,7 @@ $query = mysqli_query($conn, $sql);
         <div id="enterPass" class="off">
             <div class="inner">
                 Enter Password:<br>
-                <input type="password" id="realPass">
+                <input type="password" id="realPass" onkeypress="handleEnter(event, this)" onchange="sendPass(this)">
             </div>
             <!--end inner-->
         </div>
@@ -167,6 +167,12 @@ $query = mysqli_query($conn, $sql);
 
 
         <script language="JavaScript">
+
+            function handleEnter(e){
+                if(e.keyCode === 13){
+                    this.blur();
+                }
+            }
 
             function setCourse(id, desc, myEl) {
                 courseid = id;
@@ -187,7 +193,7 @@ $query = mysqli_query($conn, $sql);
 //                    alert(i+1 + "of " + nodeArr.length + ". " + el.nodeName + ", " + el.nodeType + ", " + el.nodeValue + ", " + el.id);
                     if (nodeArr[i].tagName == "DIV" && nodeArr[i].id != "course" + id) {
 //                        alert("removing " + nodeArr[i].id);
-                        nodeArr[i].remove();
+                        nodeArr[i].parentNode.removeChild(nodeArr[i]);
                     }
                 }
             }
@@ -195,10 +201,11 @@ $query = mysqli_query($conn, $sql);
                 studentid = mySelect.value;
                 var selected = mySelect.options[mySelect.selectedIndex];
                 var setStudentNode = mySelect.parentNode.parentNode.parentNode;
+                recurseDomChildren(setStudentNode, true);
                 setStudentNode.classList.remove("on");
                 setStudentNode.classList.add("off");
                 var setPassNode;
-                if (selected.classList == "noPass") {
+                if (selected.classList.contains("noPass")) {
                     setPassNode = setStudentNode.nextElementSibling;
                     setPassNode.classList.remove("off");
                     setPassNode.classList.add("on");

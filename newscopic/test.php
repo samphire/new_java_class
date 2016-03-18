@@ -97,7 +97,6 @@ $sql = "SELECT * from tbl_qns" . $_SESSION['qnstable'];
 $query = mysqli_query($conn, $sql) or die("some problem");
 $_SESSION['numq'] = mysqli_num_rows($query);
 
-
 //STOPS ENTER KEY FROM SUBMITTING FORM
 print "<script type='text/javascript'>
     \nfunction stopRKey(evt) {
