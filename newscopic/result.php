@@ -16,12 +16,21 @@ include("sessionheader.inc");
             padding: 2%;
         }
 
+        #btnAgain {
+            margin: 1rem;
+            width: 240px;
+            height: 105px;
+            text-align: right;
+            font-size: 0.7em;
+        }
+
         input {
             padding: 3%;
             font-size: 0.5em;
             border-radius: 8px;
         }
-        #home{
+
+        #home {
             position: fixed;
             left: 0px;
             top: 0px;
@@ -29,13 +38,36 @@ include("sessionheader.inc");
             cursor: pointer;
         }
 
+        @media screen and (max-width: 760px) {
+            #again {
+                left: 3%;
+                width: 90%;
+            }
+
+            body {
+                padding-left: 0%;
+                margin-left: 0%;
+            }
+        }
+
     </style>
 
-<script type="text/javascript">
-    function goHome(){
-        window.location.href="home.php";
-    }
-</script>
+    <script type="text/javascript">
+        function goHome() {
+            window.location.href = "home.php";
+        }
+
+        imgArr = ['meme.png', 'fem.png', 'rog.png', 'fees.png', 'jimmy.png', 'root.png', 'angry kitty.png', 'kitty.png', 'anger.png', 'monkey.png', 'soldier.png', 'guy.png', 'moon.png', 'bird.png', 'symbol.png', 'anger'];
+
+
+        window.onload = function () {
+            indx = Math.floor(Math.random() * imgArr.length);
+            var randomImage = "url('img/" + imgArr[indx] + "')";
+            var el = document.getElementById("btnAgain");
+            el.style.background = "azure " + randomImage + " no-repeat";
+            el.value = "Again";
+        }
+    </script>
 
 <?php
 print "\n</head>";
@@ -170,7 +202,7 @@ if ($percent_score != 100) {
 
     print "<div id='again'>\n$percent_score%
     <form action='" . $_SESSION['global_url'] . "/test.php' method='get'>\n
-    <input type='submit' id='btnAgain' value='Again' />\n
+    <input type='submit' id='btnAgain' value='' />\n
     </form>\n</div>";
 } else {
     print "<div id='again'>만점</div>";

@@ -9,7 +9,8 @@ include("sessionheader.inc");
 ?>
     <style type="text/css">
         html {
-            font-size: 22px;
+            font-size: 14px;
+            text-decoration: none;
         }
 
         body {
@@ -34,15 +35,6 @@ include("sessionheader.inc");
             font-weight: bold;
         }
 
-        .rubrik {
-            display: block;
-            color: #333333;
-            font-weight: bold;
-            font-size: 1.2em;
-            margin-bottom: 0.5em;
-
-        }
-
         input[type=radio] {
             width: 2em;
             height: 2em;
@@ -58,22 +50,76 @@ include("sessionheader.inc");
         }
 
         input[type=checkbox] {
-            width: 2em;
-            height: 2em;
-            padding: 10px;
+            width: 2rem;
+            height: 2rem;
+            padding: 1rem;
             margin-bottom: 25px;
         }
 
         input[type=submit] {
-            font-size: 1.2em;
-            border-radius: 0.7em;
-            padding: 0.3em;
-            color: #333333;
-            background-color: #62994E;
+            font-size: 2rem;
+            border-radius: 0.2rem;
+            padding: 0.4rem;
+            margin-bottom: 3rem;
+            color: purple;
+            background-color: rgba(98,153, 78, 0.5);
+        }
+
+        input[type=text] {
+            font-size: 1.3rem;
+            padding: 0.2em;
+            margin-left: 2rem;
+        }
+
+        .rubrik {
+            margin-top: 2rem;
+            padding: 0.5rem 1.5rem;
+            border: 1px solid blue;
+            border-radius: 0.1rem;
+            background-color: rgba(100, 149, 237, 0.2);
+            display: inline-block;
+            color: #111111;
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        img{
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+            height: auto;
+        }
+
+        @media screen and (min-width: 768px) {
+            #container {
+                width: 70%;
+                margin: 0 auto;
+            }
+            html{
+                font-size: 22px;
+            }
+            body{
+                font-size: xx-large;
+            }
+            img{
+                width: unset;
+                max-width: 150%;
+                height: auto;
+            }
+            input[type=checkbox] {
+                width: 1.4rem;
+                height: 1.4rem;
+                padding: 1rem;
+                margin-bottom: 25px;
+            }
         }
 
     </style>
 
+    <div id="container">
 
 <?php
 print "\n<object id='Player' height='0' width='0' classid='CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6'></object>";
@@ -98,7 +144,7 @@ $query = mysqli_query($conn, $sql) or die("some problem");
 $_SESSION['numq'] = mysqli_num_rows($query);
 
 //STOPS ENTER KEY FROM SUBMITTING FORM
-print "<script type='text/javascript'>
+print "\n\n<script type='text/javascript'>
     \nfunction stopRKey(evt) {
     \nvar evt = (evt) ? evt : ((event) ? event : null);
     \nvar node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
@@ -179,12 +225,12 @@ foreach ($queshy as $val => $wow) {
     $lenput = strlen($queshy[$val]['answer']) + 5;
 
     if ($queshy[$val]['rubrik'] <> "") {
-        print "\n<span class='rubrik'>" . $queshy[$val]['rubrik'] . "</span>";
+        print "\n<span class='rubrik'>" . $queshy[$val]['rubrik'] . "</span><hr>";
     }
 
     if ($queshy[$val]['image'] <> "") {
-        print "\n<table cellpadding=0><tr><td><img src='" . $_SESSION['global_url'] .
-            "/images/" . $queshy[$val]['image'] . "' align='left' class='dropshadow' alt='img'/></td></tr><tr><td>";
+        print "\n\n\n<img src='" . $_SESSION['global_url'] .
+            "/images/" . $queshy[$val]['image'] . "' align='center' class='dropshadow' alt='img'>";
     }
 
     if ($queshy[$val]['audio'] <> "") {
@@ -197,26 +243,26 @@ foreach ($queshy as $val => $wow) {
         print "\n\n\n<input type='button' name='bob' value='play' OnClick='Player$val.url=" . chr(34) . "media/video/" . $queshy[$val]['video'] . chr(34) . "; Player$val.controls.play();'>";
     }
 
-    print "<div class='questionBlock'>";
+    print "\n<div class='questionBlock'>";
 
     switch ($queshy[$val]['type']) {
         case "1":
 
             if (substr($queshy[$val]['txt1'], 0, 8) == "Question") {
-                print "\n\n\n<span class='question'>" . substr($queshy[$val]['txt1'], 0, 11) . "</span>&nbsp;&nbsp;&nbsp;&nbsp;" . substr($queshy[$val]['txt1'], 12);
+                print "\n<span class='question'>" . substr($queshy[$val]['txt1'], 0, 11) . "</span>&nbsp;&nbsp;&nbsp;&nbsp;" . substr($queshy[$val]['txt1'], 12);
             } else {
-                print "\n\n\n<span class='question'>Q " . $qnumdisplay . "</span>&nbsp;&nbsp;&nbsp;&nbsp;" . $queshy[$val]['txt1'];
+                print "\n<span class='question'>Q " . $qnumdisplay . "</span>&nbsp;&nbsp;&nbsp;&nbsp;" . $queshy[$val]['txt1'];
             }
-            print "\n\n<input type='text' size='$lenput' name='response" . $queshy[$val]['qnum'] . "' /> " . $queshy[$val]['txt2'] . "<br><br>";
+            print "\n\n<input type='text' size='$lenput' name='response" . $queshy[$val]['qnum'] . "' /> " . $queshy[$val]['txt2'] . "<br>";
             print"</div>";
             break;
 
 
         case "2":
             if (substr($queshy[$val]['txt1'], 0, 8) == "Question") {
-                print "\n\n\n<span class='question'>" . substr($queshy[$val]['txt1'], 0, 11) . "</span>&nbsp;&nbsp;&nbsp;&nbsp;" . substr($queshy[$val]['txt1'], 12);
+                print "\n<span class='question'>" . substr($queshy[$val]['txt1'], 0, 11) . "</span>&nbsp;&nbsp;&nbsp;&nbsp;" . substr($queshy[$val]['txt1'], 12);
             } else {
-                print "\n\n\n<span class='question'>Q " . $qnumdisplay . "</span>&nbsp;&nbsp;&nbsp;&nbsp;" . $queshy[$val]['txt1'];
+                print "\n<span class='question'>Q " . $qnumdisplay . "</span>&nbsp;&nbsp;&nbsp;&nbsp;" . $queshy[$val]['txt1'];
             }
             $brad = "<br><br>\n<select name='response" .
                 $queshy[$val]['qnum'] . "'>\n<option></option>\n<option>" . $queshy[$val]['txt2'] .
@@ -234,7 +280,7 @@ foreach ($queshy as $val => $wow) {
             if ($queshy[$val]['txt7'] <> "") {
                 $brad .= "\n <option>" . $queshy[$val]['txt7'] . " </option >";
             }
-            $brad .= "\n</select> \n<br><br></div>";
+            $brad .= "\n</select> \n<br></div>";
             print $brad;
             break;
 
@@ -242,7 +288,7 @@ foreach ($queshy as $val => $wow) {
             if (substr($queshy[$val]['txt1'], 0, 8) == "Question") {
                 print "\n<span class='question'>" . substr($queshy[$val]['txt1'], 0, 11) . "</span>&nbsp;&nbsp;&nbsp;&nbsp;" . substr($queshy[$val]['txt1'], 12);
             } else {
-                print "\n\n\n<span class='question'>\nQ" . $qnumdisplay . "</span>&nbsp;&nbsp;&nbsp;&nbsp;" . $queshy[$val]['txt1'];
+                print "\n<span class='question'>\nQ" . $qnumdisplay . "</span>&nbsp;&nbsp;&nbsp;&nbsp;" . $queshy[$val]['txt1'];
             }
 
             $izzy = "\n<br><br>\n<input type='radio' name='response" . $queshy[$val]['qnum'] . "' id='" . $queshy[$val]['qnum'] . "a' value=" . chr(34) . $queshy[$val]['txt2'] . chr(34) . " />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "a'>" . $queshy[$val]['txt2'] . "</label>";
@@ -282,7 +328,7 @@ foreach ($queshy as $val => $wow) {
             if (substr($queshy[$val]['txt1'], 0, 8) == "Question") {
                 print "\n<span class='question'>" . substr($queshy[$val]['txt1'], 0, 11) . "</span>&nbsp;&nbsp;&nbsp;&nbsp;" . substr($queshy[$val]['txt1'], 12);
             } else {
-                print "\n\n\n<span class='question'>\nQ" . $qnumdisplay . " </span>&nbsp;&nbsp;&nbsp;&nbsp;" . $queshy[$val]['txt1'];
+                print "\n<span class='question'>\nQ" . $qnumdisplay . " </span>&nbsp;&nbsp;&nbsp;&nbsp;" . $queshy[$val]['txt1'];
             }
             $izzy = "\n<br><br>\n<input type='checkbox' id='" . $queshy[$val]['qnum'] . "a' onclick='bob" . $queshy[$val]['qnum'] . "()' />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "a'> " . $queshy[$val]['txt2'] . "</label><br>\n<input type='checkbox' id='" . $queshy[$val]['qnum'] . "b' onclick='bob" . $queshy[$val]['qnum'] . "()' />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "b'>" . $queshy[$val]['txt3'] . "</label>";
             $jav = "\n<script type='text/javascript'>\nfunction bob" . $queshy[$val]['qnum'] . "(){\nvar cat = document.getElementById('" . $queshy[$val]['qnum'] . "a').checked + ',' + document.getElementById('" . $queshy[$val]['qnum'] . "b').checked + ','";
@@ -317,7 +363,7 @@ foreach ($queshy as $val => $wow) {
 
 //            echo "<h1>$izzy</h1>";
 
-            error_log( $izzy, 3, "bob.txt");
+            error_log($izzy, 3, "bob.txt");
 
             print $izzy;
             print $jav;
@@ -326,15 +372,13 @@ foreach ($queshy as $val => $wow) {
 
 
     }
-    if ($queshy[$val]['image'] <> "") {
-        print "\n </td ></tr ></table > ";
-    }
+
 }
 print "\n\n <center><input type = 'submit' name = 'submit' id = 'sendbutton' value = \"Send\" /></center>";
 if ($_SESSION['oneshot'] == -1 && $_SESSION['ppraccy'] == -1) {
     print"\n<hr /><strong>연습만?</strong>  <input type='checkbox' name='praccy' align='left'>";
 }
-print "\n</form>\n\n";
+print "\n</form>\n</div>\n";
 print "\n</body>\n</html>";
 
 

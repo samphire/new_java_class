@@ -76,7 +76,9 @@ $query = mysqli_query($conn, $sql);
     var ajax;
     if (typeof Storage !== "undefined") {
         //Below line has to be set when testing and so on...
-        localStorage.removeItem("user");
+        if(screen.width > 767) {
+            localStorage.removeItem("user");
+        }
         if (localStorage.getItem("user")) {
             courseid = localStorage.getItem("course");
             coursedesc = localStorage.getItem("coursedesc");

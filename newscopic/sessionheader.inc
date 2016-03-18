@@ -16,7 +16,7 @@ $_SESSION['global_url'] = "http://52.192.60.185/scopic";
 print "<!DOCTYPE html>";
 print "\n<head>
 \n<title>NSU Java Quiz Site</title>
-\n<meta charset=\"utf-8\">
+\n<meta charset=\"UTF-8\">
 \n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no\">";
 print "\n<link rel='stylesheet' type='text/css' href='css/font/ubuntu.css'>";
 //print "\n<link rel=\"SHORTCUT ICON\" href='" .$_SESSION['global_url'] . "/images/scopic.ico' />";

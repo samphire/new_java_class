@@ -60,11 +60,19 @@ function convert_datetime($str)
             float: right;
             padding: 5px;
         }
-        #reset{
+
+        #reset {
             position: absolute;
         }
     </style>
 
+    <script type="text/javascript">
+
+        function doTest(testid) {
+            window.location = "test.php?testid=" + testid;
+        }
+
+    </script>
 
 <?php
 print   "\n</head>\n<body>";
@@ -74,7 +82,7 @@ print "\n<div class='header'><h2>" . $_SESSION['coursedesc'] . "</h2></div>";
 //Get List of Classes the student belongs to
 $sql = "SELECT * FROM tbl_stud_class JOIN tbl_classes
 ON tbl_stud_class.fld_class_id=tbl_classes.fld_class_id
-WHERE tbl_stud_class.fld_student_id='" . $_SESSION['studid']."'";
+WHERE tbl_stud_class.fld_student_id='" . $_SESSION['studid'] . "'";
 //echo "<br>$sql<br>";
 $query = mysqli_query($conn, $sql);
 
@@ -141,14 +149,3 @@ ORDER BY bob.fld_test_id";
 print "</body></html>";
 
 ?>
-
-    <script type="text/javascript">
-
-        function doTest(testid) {
-            window.location = "test.php?testid=" + testid;
-        }
-
-    </script>
-
-
-<?php
