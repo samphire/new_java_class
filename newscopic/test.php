@@ -62,7 +62,7 @@ include("sessionheader.inc");
             padding: 0.4rem;
             margin-bottom: 3rem;
             color: purple;
-            background-color: rgba(98,153, 78, 0.5);
+            background-color: rgba(98, 153, 78, 0.5);
         }
 
         input[type=text] {
@@ -85,7 +85,7 @@ include("sessionheader.inc");
             margin-right: auto;
         }
 
-        img{
+        img {
             display: block;
             margin-left: auto;
             margin-right: auto;
@@ -93,22 +93,31 @@ include("sessionheader.inc");
             height: auto;
         }
 
+        .done {
+            color: firebrick;
+            font-weight: bolder;
+        }
+
         @media screen and (min-width: 768px) {
             #container {
                 width: 70%;
                 margin: 0 auto;
             }
-            html{
+
+            html {
                 font-size: 22px;
             }
-            body{
+
+            body {
                 font-size: xx-large;
             }
-            img{
+
+            img {
                 width: unset;
                 max-width: 150%;
                 height: auto;
             }
+
             input[type=checkbox] {
                 width: 1.4rem;
                 height: 1.4rem;
@@ -167,7 +176,9 @@ if ($_SESSION['retain'] == -1) {
         $numrows = mysqli_num_rows($query);
         if ($numrows < 1) {
             print "<h1>You have already completed this test</h1>";
-            exit;
+            $sql = "SELECT * from tbl_qns" . $_SESSION['qnstable'];
+            $query = mysqli_query($conn, $sql);
+            $done = true;
         }
     } else {
         $sql = "SELECT * from tbl_qns" . $_SESSION['qnstable'];
@@ -253,7 +264,11 @@ foreach ($queshy as $val => $wow) {
             } else {
                 print "\n<span class='question'>Q " . $qnumdisplay . "</span>&nbsp;&nbsp;&nbsp;&nbsp;" . $queshy[$val]['txt1'];
             }
-            print "\n\n<input type='text' size='$lenput' name='response" . $queshy[$val]['qnum'] . "' /> " . $queshy[$val]['txt2'] . "<br>";
+            if ($done) {
+                print "\n\n&nbsp;&nbsp;&nbsp;<span class='done'>" . $queshy[$val]['answer'] . "</span>";
+            } else {
+                print "\n\n<input type='text' size='$lenput' name='response" . $queshy[$val]['qnum'] . "' /> " . $queshy[$val]['txt2'] . "<br>";
+            }
             print"</div>";
             break;
 
@@ -265,20 +280,20 @@ foreach ($queshy as $val => $wow) {
                 print "\n<span class='question'>Q " . $qnumdisplay . "</span>&nbsp;&nbsp;&nbsp;&nbsp;" . $queshy[$val]['txt1'];
             }
             $brad = "<br><br>\n<select name='response" .
-                $queshy[$val]['qnum'] . "'>\n<option></option>\n<option>" . $queshy[$val]['txt2'] .
-                "</option>\n<option>" . $queshy[$val]['txt3'] . "</option>";
+                $queshy[$val]['qnum'] . "'>\n<option></option>\n<option" . ($done ? ($queshy[$val]['txt2'] == $queshy[$val]['answer'] ? " selected" : "") : "") . ">" . $queshy[$val]['txt2'] . ($done ? ($queshy[$val]['txt'] == $queshy[$val]['answer'] ? " selected" : "") : "") .
+                "</option>\n<option" . ($done ? ($queshy[$val]['txt3'] == $queshy[$val]['answer'] ? " selected" : "") : "") . ">" . $queshy[$val]['txt3'] . "</option>";
 
             if ($queshy[$val]['txt4'] <> "") {
-                $brad .= "\n <option>" . $queshy[$val]['txt4'] . " </option >";
+                $brad .= "\n <option" . ($done ? ($queshy[$val]['txt4'] == $queshy[$val]['answer'] ? " selected" : "") : "") . ">" . $queshy[$val]['txt4'] . " </option >";
             }
             if ($queshy[$val]['txt5'] <> "") {
-                $brad .= "\n <option>" . $queshy[$val]['txt5'] . " </option >";
+                $brad .= "\n <option" . ($done ? ($queshy[$val]['txt5'] == $queshy[$val]['answer'] ? " selected" : "") : "") . ">" . $queshy[$val]['txt5'] . " </option >";
             }
             if ($queshy[$val]['txt6'] <> "") {
-                $brad .= "\n <option>" . $queshy[$val]['txt6'] . " </option >";
+                $brad .= "\n <option" . ($done ? ($queshy[$val]['txt6'] == $queshy[$val]['answer'] ? " selected" : "") : "") . ">" . $queshy[$val]['txt6'] . " </option >";
             }
             if ($queshy[$val]['txt7'] <> "") {
-                $brad .= "\n <option>" . $queshy[$val]['txt7'] . " </option >";
+                $brad .= "\n <option" . ($done ? ($queshy[$val]['txt7'] == $queshy[$val]['answer'] ? " selected" : "") : "") . ">" . $queshy[$val]['txt7'] . " </option >";
             }
             $brad .= "\n</select> \n<br></div>";
             print $brad;
@@ -291,20 +306,20 @@ foreach ($queshy as $val => $wow) {
                 print "\n<span class='question'>\nQ" . $qnumdisplay . "</span>&nbsp;&nbsp;&nbsp;&nbsp;" . $queshy[$val]['txt1'];
             }
 
-            $izzy = "\n<br><br>\n<input type='radio' name='response" . $queshy[$val]['qnum'] . "' id='" . $queshy[$val]['qnum'] . "a' value=" . chr(34) . $queshy[$val]['txt2'] . chr(34) . " />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "a'>" . $queshy[$val]['txt2'] . "</label>";
-            $izzy .= "\n<br>\n<input type='radio' name='response" . $queshy[$val]['qnum'] . "' id='" . $queshy[$val]['qnum'] . "b' value=" . chr(34) . $queshy[$val]['txt3'] . chr(34) . " />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "b'>" . $queshy[$val]['txt3'] . "</label>";
+            $izzy = "\n<br><br>\n<input type='radio' name='response" . $queshy[$val]['qnum'] . "' id='" . $queshy[$val]['qnum'] . "a' value=" . chr(34) . $queshy[$val]['txt2'] . chr(34) . ($done ? ($queshy[$val]['txt2'] == $queshy[$val]['answer'] ? " checked" : "") : "") . " />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "a'>" . $queshy[$val]['txt2'] . "</label>";
+            $izzy .= "\n<br>\n<input type='radio' name='response" . $queshy[$val]['qnum'] . "' id='" . $queshy[$val]['qnum'] . "b' value=" . chr(34) . $queshy[$val]['txt3'] . chr(34) . ($done ? ($queshy[$val]['txt3'] == $queshy[$val]['answer'] ? " checked" : "") : "") . " />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "b'>" . $queshy[$val]['txt3'] . "</label>";
 
             if ($queshy[$val]['txt4'] <> "") {
-                $izzy .= "<br>\n<input type='radio' name='response" . $queshy[$val]['qnum'] . "' id='" . $queshy[$val]['qnum'] . "c' value=" . chr(34) . $queshy[$val]['txt4'] . chr(34) . " />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "c'>" . $queshy[$val]['txt4'] . "</label>";
+                $izzy .= "<br>\n<input type='radio' name='response" . $queshy[$val]['qnum'] . "' id='" . $queshy[$val]['qnum'] . "c' value=" . chr(34) . $queshy[$val]['txt4'] . chr(34) . ($done ? ($queshy[$val]['txt4'] == $queshy[$val]['answer'] ? " checked" : "") : "") . " />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "c'>" . $queshy[$val]['txt4'] . "</label>";
             }
             if ($queshy[$val]['txt5'] <> "") {
-                $izzy .= "<br>\n<input type='radio' name='response" . $queshy[$val]['qnum'] . "' id='" . $queshy[$val]['qnum'] . "d' value=" . chr(34) . $queshy[$val]['txt5'] . chr(34) . " />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "d'>" . $queshy[$val]['txt5'] . "</label>";
+                $izzy .= "<br>\n<input type='radio' name='response" . $queshy[$val]['qnum'] . "' id='" . $queshy[$val]['qnum'] . "d' value=" . chr(34) . $queshy[$val]['txt5'] . chr(34) . ($done ? ($queshy[$val]['txt5'] == $queshy[$val]['answer'] ? " checked" : "") : "") . " />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "d'>" . $queshy[$val]['txt5'] . "</label>";
             }
             if ($queshy[$val]['txt6'] <> "") {
-                $izzy .= "<br>\n<input type='radio' name='response" . $queshy[$val]['qnum'] . "' id='" . $queshy[$val]['qnum'] . "e' value=" . chr(34) . $queshy[$val]['txt6'] . chr(34) . " />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "e'>" . $queshy[$val]['txt6'] . "</label>";
+                $izzy .= "<br>\n<input type='radio' name='response" . $queshy[$val]['qnum'] . "' id='" . $queshy[$val]['qnum'] . "e' value=" . chr(34) . $queshy[$val]['txt6'] . chr(34) . ($done ? ($queshy[$val]['txt6'] == $queshy[$val]['answer'] ? " checked" : "") : "") . " />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "e'>" . $queshy[$val]['txt6'] . "</label>";
             }
             if ($queshy[$val]['txt7'] <> "") {
-                $izzy .= "<br>\n<input type='radio' name='response" . $queshy[$val]['qnum'] . "' id='" . $queshy[$val]['qnum'] . "f' value=" . chr(34) . $queshy[$val]['txt7'] . chr(34) . " />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "f'>" . $queshy[$val]['txt7'] . "</label>";
+                $izzy .= "<br>\n<input type='radio' name='response" . $queshy[$val]['qnum'] . "' id='" . $queshy[$val]['qnum'] . "f' value=" . chr(34) . $queshy[$val]['txt7'] . chr(34) . ($done ? ($queshy[$val]['txt7'] == $queshy[$val]['answer'] ? " checked" : "") : "") . " />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "f'>" . $queshy[$val]['txt7'] . "</label>";
             }
 
             print $izzy;
@@ -324,34 +339,44 @@ foreach ($queshy as $val => $wow) {
 
         case
         "5":
+            //Create array holding true and false for each checkbox
+
+            $chkArray = explode(",", $queshy[$val]['answer']);
+
+            if (!$done) {
+                for ($e = 0; $e < count($chkArray); $e++) {
+                    $chkArray[$e] = "false";
+                }
+            }
+
 
             if (substr($queshy[$val]['txt1'], 0, 8) == "Question") {
                 print "\n<span class='question'>" . substr($queshy[$val]['txt1'], 0, 11) . "</span>&nbsp;&nbsp;&nbsp;&nbsp;" . substr($queshy[$val]['txt1'], 12);
             } else {
                 print "\n<span class='question'>\nQ" . $qnumdisplay . " </span>&nbsp;&nbsp;&nbsp;&nbsp;" . $queshy[$val]['txt1'];
             }
-            $izzy = "\n<br><br>\n<input type='checkbox' id='" . $queshy[$val]['qnum'] . "a' onclick='bob" . $queshy[$val]['qnum'] . "()' />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "a'> " . $queshy[$val]['txt2'] . "</label><br>\n<input type='checkbox' id='" . $queshy[$val]['qnum'] . "b' onclick='bob" . $queshy[$val]['qnum'] . "()' />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "b'>" . $queshy[$val]['txt3'] . "</label>";
+            $izzy = "\n<br><br>\n<input type='checkbox' id='" . $queshy[$val]['qnum'] . "a' onclick='bob" . $queshy[$val]['qnum'] . "()'" . ($chkArray[0] == "true" ? "checked" : "") . " />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "a'> " . $queshy[$val]['txt2'] . "</label><br>\n<input type='checkbox' id='" . $queshy[$val]['qnum'] . "b' onclick='bob" . $queshy[$val]['qnum'] . "()'" . ($chkArray[1] == "true" ? "checked" : "") . " />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "b'>" . $queshy[$val]['txt3'] . "</label>";
             $jav = "\n<script type='text/javascript'>\nfunction bob" . $queshy[$val]['qnum'] . "(){\nvar cat = document.getElementById('" . $queshy[$val]['qnum'] . "a').checked + ',' + document.getElementById('" . $queshy[$val]['qnum'] . "b').checked + ','";
             $jav_mid = " + 'false,false,false,false,';";
 
             if ($queshy[$val]['txt4'] <> "") {
-                $izzy .= "<br>\n<input type='checkbox' id='" . $queshy[$val]['qnum'] . "c' onclick='bob" . $queshy[$val]['qnum'] . "()' />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "c'>" . $queshy[$val]['txt4'] . "</label>";
+                $izzy .= "<br>\n<input type='checkbox' id='" . $queshy[$val]['qnum'] . "c' onclick='bob" . $queshy[$val]['qnum'] . "()'" . ($chkArray[2] == "true" ? "checked" : "") . " />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "c'>" . $queshy[$val]['txt4'] . "</label>";
                 $jav .= " + document.getElementById('" . $queshy[$val]['qnum'] . "c').checked + ','";
                 $jav_mid = " + 'false,false,false,';";
             }
 
             if ($queshy[$val]['txt5'] <> "") {
-                $izzy .= "<br>\n<input type='checkbox' id='" . $queshy[$val]['qnum'] . "d' onclick='bob" . $queshy[$val]['qnum'] . "()' />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "d'>" . $queshy[$val]['txt5'] . "</label>";
+                $izzy .= "<br>\n<input type='checkbox' id='" . $queshy[$val]['qnum'] . "d' onclick='bob" . $queshy[$val]['qnum'] . "()'" . ($chkArray[3] == "true" ? "checked" : "") . " />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "d'>" . $queshy[$val]['txt5'] . "</label>";
                 $jav .= " + document.getElementById('" . $queshy[$val]['qnum'] . "d').checked + ','";
                 $jav_mid = " + 'false,false,';";
             }
             if ($queshy[$val]['txt6'] <> "") {
-                $izzy .= "<br>\n<input type='checkbox' id='" . $queshy[$val]['qnum'] . "e' onclick='bob" . $queshy[$val]['qnum'] . "()' />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "e'>" . $queshy[$val]['txt6'] . "</label>";
+                $izzy .= "<br>\n<input type='checkbox' id='" . $queshy[$val]['qnum'] . "e' onclick='bob" . $queshy[$val]['qnum'] . "()'" . ($chkArray[4] == "true" ? "checked" : "") . " />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "e'>" . $queshy[$val]['txt6'] . "</label>";
                 $jav .= " + document.getElementById('" . $queshy[$val]['qnum'] . "e').checked + ','";
                 $jav_mid = " + 'false,';";
             }
             if ($queshy[$val]['txt7'] <> "") {
-                $izzy .= "<br>\n<input type='checkbox' id='" . $queshy[$val]['qnum'] . "f' onclick='bob" . $queshy[$val]['qnum'] . "()' />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "f'>" . $queshy[$val]['txt7'] . "</label>";
+                $izzy .= "<br>\n<input type='checkbox' id='" . $queshy[$val]['qnum'] . "f' onclick='bob" . $queshy[$val]['qnum'] . "()'" . ($chkArray[5] == "true" ? "checked" : "") . " />&nbsp;&nbsp;<label for='" . $queshy[$val]['qnum'] . "f'>" . $queshy[$val]['txt7'] . "</label>";
                 $jav .= " + document.getElementById('" . $queshy[$val]['qnum'] . "f').checked + ','";
                 $jav_mid = "";
             }
@@ -374,7 +399,10 @@ foreach ($queshy as $val => $wow) {
     }
 
 }
-print "\n\n <center><input type = 'submit' name = 'submit' id = 'sendbutton' value = \"Send\" /></center>";
+if (!$done) {
+    print "\n\n <center><input type = 'submit' name = 'submit' id = 'sendbutton' value = \"Send\" /></center>";
+}
+
 if ($_SESSION['oneshot'] == -1 && $_SESSION['ppraccy'] == -1) {
     print"\n<hr /><strong>연습만?</strong>  <input type='checkbox' name='praccy' align='left'>";
 }

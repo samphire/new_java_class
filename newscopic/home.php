@@ -56,6 +56,11 @@ function convert_datetime($str)
             cursor: pointer;
         }
 
+        .done{
+            background-color: sandybrown;
+            color: black;
+        }
+
         .perc {
             float: right;
             padding: 5px;
@@ -137,6 +142,8 @@ ORDER BY bob.fld_test_id";
             } else {
                 echo "<div class='testChoice' onclick='doTest($val[0]);'> $val[1] <div class='perc'></div></div>";
             }
+        } else{
+            echo "<div class='testChoice done' onclick='doTest($val[0]);'> $val[1]&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;COMPLETE</div>";
         }
     }
 
