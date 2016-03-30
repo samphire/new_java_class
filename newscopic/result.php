@@ -102,9 +102,12 @@ function calcScore($query)
 function trimbo($stringo)
 {
     //Trims single quotes, then whitespace, then reinserts single quotes
-    $tempo = trim($stringo, chr(39));
-    $tempo = trim($tempo);
-    $tempo = chr(39) . $tempo . chr(39);
+//    $tempo = trim($stringo, chr(39));
+//    $tempo = trim($tempo);
+//    $tempo = chr(39) . $tempo . chr(39);
+    $tempo = mysqli_real_escape_string($conn, $stringo);
+
+
     return $tempo;
 }
 
@@ -131,12 +134,12 @@ if ($_SESSION['retain'] == -1) {
         $sql = "Update tbl_response" . $_SESSION['qnstable'] . "
         SET tbl_response" . $_SESSION['qnstable'] . ".fld_response = CASE tbl_response" . $_SESSION['qnstable'] . ".fld_question_id ";
         while (list($qnumber, , $txt1, , , , , , , $answer) = mysqli_fetch_row($query)) {
-            $sql .= " WHEN $qnumber THEN " . trimbo($response[$qnumber]);
+            $sql .= " WHEN $qnumber THEN '" . mysqli_real_escape_string($conn, $response[$qnumber]) . "'";
         }
         $sql .= " ELSE tbl_response" . $_SESSION['qnstable'] . ".fld_response END
         WHERE fld_student_id=" . $_SESSION['studid'];
 
-//        echo $sql."<br>";
+//        echo $sql . "<br>";
 
         mysqli_query($conn, $sql) or die("Error message is:  " . mysqli_error($conn));
 
@@ -153,7 +156,7 @@ if ($_SESSION['retain'] == -1) {
         // INSERT response table     This should not work because of shuffle... something fishy going on that makes it work, but is it reliable?
         $sql = "INSERT INTO tbl_response" . $_SESSION['qnstable'] . " (fld_student_id,fld_question_id,fld_response) VALUES";
         for ($x = 1; $x <= $_SESSION['numq']; $x++) {
-            $sql .= "('" . $_SESSION['studid'] . "',$x," . trimbo($response[$x]) . "),";
+            $sql .= "('" . $_SESSION['studid'] . "',$x,'" . mysqli_real_escape_string($conn, $response[$x]) . "'),";
         }
         $sql = rtrim($sql, ",");
         mysqli_query($conn, $sql) or die(mysqli_error($conn));
@@ -181,10 +184,10 @@ if ($_SESSION['retain'] == -1) {
 
     $sql = "INSERT INTO tbl_response" . $_SESSION['qnstable'] . " (fld_student_id,fld_question_id,fld_response) VALUES";
     for ($x = 1; $x <= $_SESSION['numq']; $x++) {
-        $sql .= "('" . $_SESSION['studid'] . "',$x," . trimbo($response[$x]) . "),";
+        $sql .= "('" . $_SESSION['studid'] . "',$x,'" . mysqli_real_escape_string($conn, $response[$x]) . "'),";
     }
     $sql = rtrim($sql, ",");
-    mysqli_query($conn, $sql) or die("damn!" . mysqli_error($conn));
+    mysqli_query($conn, $sql) or die("damn!" . mysqli_error($conn) . "<br><br>" . $sql);
 
     //SELECT wrongly answered questions
     $query = callWrong($conn);
@@ -196,17 +199,19 @@ if ($_SESSION['retain'] == -1) {
 }
 
 $percent_score = round($percent_score);
+if ($_SESSION['retain'] == -1) {
+    if ($percent_score != 100) {
+        $bob = $_SESSION['testid'] . "/" . $_SESSION['testblurb'];
 
-if ($percent_score != 100) {
-    $bob = $_SESSION['testid'] . "/" . $_SESSION['testblurb'];
-
-    print "<div id='again'>\n$percent_score%
+        print "<div id='again'>\n$percent_score%
     <form action='" . $_SESSION['global_url'] . "/test.php' method='get'>\n
     <input type='submit' id='btnAgain' value='' />\n
     </form>\n</div>";
-} else {
-    print "<div id='again'>만점</div>";
+    } else {
+        print "<div id='again'>만점</div>";
+    }
+} else{
+    print "<div id='again'>\n$percent_score%</div>";
 }
-
 print "\n</div>\n</body>\n</html>";
 

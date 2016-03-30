@@ -184,6 +184,20 @@ if ($_SESSION['retain'] == -1) {
         $sql = "SELECT * from tbl_qns" . $_SESSION['qnstable'];
         $query = mysqli_query($conn, $sql);
     }
+} else {
+    $sql = "SELECT * FROM tbl_response" . $_SESSION['qnstable'] . " WHERE fld_student_id=" . $_SESSION['studid'];
+    $query = mysqli_query($conn, $sql);
+    $data = mysqli_fetch_array($query);
+
+    if ($data) {
+        print "<h1>You have already completed this test</h1>";
+        $sql = "SELECT * from tbl_qns" . $_SESSION['qnstable'];
+        $query = mysqli_query($conn, $sql);
+        $done = true;
+    } else {
+        $sql = "SELECT * from tbl_qns" . $_SESSION['qnstable'];
+        $query = mysqli_query($conn, $sql);
+    }
 }
 
 //QUESTIONS
