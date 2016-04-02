@@ -221,6 +221,8 @@ while (list($a, , $b, $c, $d, $e, $f, $m, $n, $g, $h, $i, $j, $k, $l) = mysqli_f
     $bob = htmlentities($e, ENT_QUOTES, 'UTF-8');
     $queshy[$counter]['txt4'] = htmlspecialchars_decode($bob, ENT_NOQUOTES);
 
+//    $queshy[$counter]['txt4'] = $e;
+
     $bob = htmlentities($f, ENT_QUOTES, 'UTF-8');
     $queshy[$counter]['txt5'] = htmlspecialchars_decode($bob, ENT_NOQUOTES);
 
@@ -230,7 +232,9 @@ while (list($a, , $b, $c, $d, $e, $f, $m, $n, $g, $h, $i, $j, $k, $l) = mysqli_f
     $bob = htmlentities($n, ENT_QUOTES, 'UTF-8');
     $queshy[$counter]['txt7'] = htmlspecialchars_decode($bob, ENT_NOQUOTES);
 
-    $queshy[$counter]['answer'] = $g;
+    $bob = htmlentities($g, ENT_QUOTES, 'UTF-8');
+    $queshy[$counter]['answer'] = htmlspecialchars_decode($bob, ENT_NOQUOTES);
+//    $queshy[$counter]['answer'] = $g;
     $queshy[$counter]['type'] = $h;
     $queshy[$counter]['rubrik'] = $i;
     $queshy[$counter]['image'] = $j;
@@ -288,6 +292,7 @@ foreach ($queshy as $val => $wow) {
 
 
         case "2":
+
             if (substr($queshy[$val]['txt1'], 0, 8) == "Question") {
                 print "\n<span class='question'>" . substr($queshy[$val]['txt1'], 0, 11) . "</span>&nbsp;&nbsp;&nbsp;&nbsp;" . substr($queshy[$val]['txt1'], 12);
             } else {
